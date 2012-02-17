@@ -1,0 +1,23 @@
+com2sec local   localhost public
+com2sec localnet 10.0.0.0/24 public
+
+group MyROSystem v1 local
+group MyROSystem v2c local
+group MyROSystem usm local
+group MyROGroup v1 localnet
+group MyROGroup v2c localnet
+group MyROGroup usm localnet
+group MyRWGroup v1 local
+group MyRWGroup v2c local
+group MyRWGroup usm local
+
+view all included .1 80
+view system included .iso.org.dod.internet.mgmt.mib-2.system
+
+# context sec.model sec.level match read write notif
+access MyROSystem ""     any       noauth    exact  system none   none
+access MyROGroup ""      any       noauth    exact  all    none   none
+access MyRWGroup ""      any       noauth    exact  all    all    none
+
+syslocation <%= node[:snmp][:location] %>
+syscontact <%= node[:snmp][:contact] %>
